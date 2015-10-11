@@ -4,20 +4,26 @@
 #include "tm_stm32f4_ili9341.h"
 #include "tm_stm32f4_fonts.h"
 #include <stdio.h>
- uint32_t gj=0;
+ uint32_t gj,m;
+ uint16_t ftp=5;
+ uint32_t res[250];
  #include "tm_stm32f4_spi.h"
  void SPI1_IRQHandler (void) {
   if (SPI_I2S_GetFlagStatus(SPI1,SPI_I2S_FLAG_RXNE)==SET) {
-    // Прерывание вызвано приемом байта ?
-    uint8_t data = SPI1->DR; //Читаем то что пришло
-//    GPIOC->ODR ^= (GPIO_Pin_9 | GPIO_Pin_8); //Инвертируем состояние светодиодов
-    SPI1->DR = 0x65; //И отправляем обратно то что приняли
 		SPI_I2S_ClearFlag(SPI1,SPI_I2S_FLAG_RXNE);
-		if(data==0x99)
+    // Прерывание вызвано приемом байта ?
+      res[m] = SPI1->DR; //Читаем то что пришло
+		ftp=25+m;
+//    GPIOC->ODR ^= (GPIO_Pin_9 | GPIO_Pin_8); //Инвертируем состояние светодиодов
+    SPI1->DR = ftp; //И отправляем обратно то что приняли
+		
+		if(res[m]==0x99)
 		{
 		GPIO_SetBits(GPIOG,GPIO_Pin_13);
 		}
+		
   }
+	m=m+1;
 }
   void  TM_SPI_Init1(void)
     {
@@ -133,6 +139,8 @@ int main(void) {
 //    TM_ILI9341_Puts(150, 150, "priveeet", &TM_Font_11x18, ILI9341_COLOR_BLACK, ILI9341_COLOR_ORANGE);
 //    	 GPIO_ToggleBits(GPIOG,  GPIO_Pin_13);
     while (1) {
+			SPI_I2S_ClearFlag(SPI1,SPI_I2S_FLAG_RXNE);
+	
 //					GPIO_SetBits(GPIOG,GPIO_Pin_13);
 //			 for( gj=0;gj<1000000;gj++){}
 //			GPIO_ResetBits(GPIOG, GPIO_Pin_13);
