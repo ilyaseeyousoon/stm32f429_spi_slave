@@ -6,14 +6,14 @@
 #include <stdio.h>
  uint32_t gj,m;
  uint16_t ftp=5;
- uint32_t res[250];
+ uint32_t res[600];
  #include "tm_stm32f4_spi.h"
  void SPI1_IRQHandler (void) {
   if (SPI_I2S_GetFlagStatus(SPI1,SPI_I2S_FLAG_RXNE)==SET) {
 		SPI_I2S_ClearFlag(SPI1,SPI_I2S_FLAG_RXNE);
     // Прерывание вызвано приемом байта ?
       res[m] = SPI1->DR; //Читаем то что пришло
-	
+	for( gj=0;gj<1000;gj++){}
 //    GPIOC->ODR ^= (GPIO_Pin_9 | GPIO_Pin_8); //Инвертируем состояние светодиодов
     SPI1->DR = m; //И отправляем обратно то что приняли
 		
