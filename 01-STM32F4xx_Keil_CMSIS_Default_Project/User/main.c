@@ -13,14 +13,14 @@
 		SPI_I2S_ClearFlag(SPI1,SPI_I2S_FLAG_RXNE);
     // Прерывание вызвано приемом байта ?
       res[m] = SPI1->DR; //Читаем то что пришло
-		ftp=25+m;
+	
 //    GPIOC->ODR ^= (GPIO_Pin_9 | GPIO_Pin_8); //Инвертируем состояние светодиодов
-    SPI1->DR = ftp; //И отправляем обратно то что приняли
+    SPI1->DR = m; //И отправляем обратно то что приняли
 		
-		if(res[m]==0x99)
-		{
-		GPIO_SetBits(GPIOG,GPIO_Pin_13);
-		}
+//		if(res[m]==0x99)
+//		{
+//		GPIO_SetBits(GPIOG,GPIO_Pin_13);
+//		}
 		
   }
 	m=m+1;
@@ -139,7 +139,7 @@ int main(void) {
 //    TM_ILI9341_Puts(150, 150, "priveeet", &TM_Font_11x18, ILI9341_COLOR_BLACK, ILI9341_COLOR_ORANGE);
 //    	 GPIO_ToggleBits(GPIOG,  GPIO_Pin_13);
     while (1) {
-			SPI_I2S_ClearFlag(SPI1,SPI_I2S_FLAG_RXNE);
+//			SPI_I2S_ClearFlag(SPI1,SPI_I2S_FLAG_RXNE);
 	
 //					GPIO_SetBits(GPIOG,GPIO_Pin_13);
 //			 for( gj=0;gj<1000000;gj++){}
